@@ -111,6 +111,13 @@ Open RViz and add the appropriate TF frames and pose topics:
 ```
 rosrun rviz rviz
 ```
+#### Add the TurtleBot3 Robot Model in RViz:
+
+1. In **RViz**, click **"Add"** on the left-hand panel.
+2. Choose **"RobotModel"** from the list of display types and click **OK**.
+3. Set the **"Fixed Frame"** to `optitrack` to match the frame where the robot is being tracked.
+4. You should now be able to visualize the TurtleBot3 and its movement based on the *simulated* VRPN data.
+
 ---
 
 ## Troubleshooting
