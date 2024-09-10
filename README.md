@@ -37,10 +37,13 @@ If the TurtleBot3 robot and world load successfully in Gazebo, the installation 
 
 ### Step 4: Modify and Run the Launch File
 
-Create a launch file called `turtlebot_sim.launch` and modify it as follows:
+Modify the launch file called `turtlebot3_world.launch` as follows:
+
 ```xml
 <launch>
-  <!-- Launch Gazebo with the TurtleBot3 world -->
+  <arg name="use_simulation" default="true" doc="Set to true to use the simulated OptiTrack node, false for real OptiTrack" />
+
+  <!-- Launch Gazebo with an empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
     <arg name="paused" value="false"/>
@@ -53,6 +56,14 @@ Create a launch file called `turtlebot_sim.launch` and modify it as follows:
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" 
         args="-urdf -model turtlebot3_burger -x -2.0 -y -0.5 -z 0.0 -param robot_description" />
+
+  <!-- Simulated VRPN Node -->
+  <group if="$(arg use_simulation)">
+    <node pkg="optitrack_sim" type="optitrack_sim.py" name="vrpn_sim_node" output="screen"/>
+  </group>
+
+  <!-- Static Transform from map to optitrack (for global positioning) -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_optitrack" args="0 0 0 0 0 0 map optitrack 100" />
 </launch>
 ```
 ---
@@ -62,7 +73,8 @@ Create a launch file called `turtlebot_sim.launch` and modify it as follows:
 Start the simulation in Gazebo by running:
 ```
 
-roslaunch turtlebot_sim turtlebot_sim.launch
+roslaunch turtlebot3_gazebo turtlebot3_world.launch
+
 ```
 ---
 
