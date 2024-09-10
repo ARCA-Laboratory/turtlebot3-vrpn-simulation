@@ -1,5 +1,7 @@
 # Simulating OptiTrack VRPN with TurtleBot3 in ROS Melodic on WSL (Windows Subsystem for Linux)
 
+This guide provides instructions to simulate an OptiTrack VRPN system with a TurtleBot3 in a ROS Melodic environment running on WSL. It outlines the steps to set up the required software components, modify launch files, and simulate motion data. The guide enables the visualization of TurtleBot3 in Gazebo and RViz using simulated data from an OptiTrack system.
+
 ## Prerequisites
 - **ROS Melodic** and **Gazebo** installed on your WSL machine.
 - **X server** set up on Windows (e.g., VcXsrv or Xming) to run graphical applications (like RViz and Gazebo).
