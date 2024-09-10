@@ -8,12 +8,29 @@ This guide provides instructions to simulate an OptiTrack VRPN system with a Tur
 
 ## Steps to Configure and Simulate VRPN with TurtleBot3 and ROS
 
-### Step 1: Install TurtleBot3 Packages
+### Step 1: Set Up Your Catkin Workspace and Clone the TurtleBot3 Repositories
 
+Create a Catkin Workspace (if you haven't already):
 Open a terminal in WSL and run:
-
 ```
-sudo apt-get install ros-melodic-turtlebot3 ros-melodic-turtlebot3-simulations
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash
+```
+Clone the TurtleBot3 Repositories:
+Navigate to the src folder of your workspace and run the following commands:
+```
+cd ~/catkin_ws/src
+git clone -b melodic-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
+git clone -b melodic-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+```
+Build the Workspace:
+Run the following commands:
+```
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash
 ```
 ---
 
