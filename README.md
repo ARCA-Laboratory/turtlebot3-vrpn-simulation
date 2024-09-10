@@ -17,17 +17,7 @@ sudo apt-get install ros-melodic-turtlebot3 ros-melodic-turtlebot3-simulations
 ```
 ---
 
-### Step 2: Set the TurtleBot3 Model Environment Variable
-
-Add the following lines to your `.bashrc` file:
-
-```
-echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc  
-source ~/.bashrc
-```
----
-
-### Step 3: Verify the Installation
+### Step 2: Verify the Installation
 
 Launch Gazebo with the TurtleBot3 world to ensure everything is installed correctly:
 ```
@@ -37,40 +27,59 @@ If the TurtleBot3 robot and world load successfully in Gazebo, the installation 
 
 ---
 
-### Step 4: Modify and Run the Launch File
+### Step 3: Modify and Run the Launch File
 
 Modify the launch file called `turtlebot3_world.launch` as follows:
 
 ```xml
 <launch>
-  <arg name="use_simulation" default="true" doc="Set to true to use the simulated OptiTrack node, false for real OptiTrack" />
+  <!-- Original TurtleBot3 Parameters -->
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>  
+  <arg name="x_pos" default="-2.0"/>
+  <arg name="y_pos" default="-0.5"/>
+  <arg name="z_pos" default="0.0"/>
 
-  <!-- Launch Gazebo with an empty world -->
+  <!-- Launch Gazebo with Empty World -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
     <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
   </include>
 
-  <!-- Spawn TurtleBot3 model in Gazebo -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" 
-        args="-urdf -model turtlebot3_burger -x -2.0 -y -0.5 -z 0.0 -param robot_description" />
+  <!-- Spawn TurtleBot3 in Gazebo -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_$(arg model) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
 
-  <!-- Simulated VRPN Node -->
-  <group if="$(arg use_simulation)">
-    <node pkg="optitrack_sim" type="optitrack_sim.py" name="vrpn_sim_node" output="screen"/>
-  </group>
+  <!-- Start VRPN (OptiTrack) Simulator -->
+  <node pkg="your_package_name" type="optitrack_sim.py" name="vrpn_sim_node" output="screen"/>
 
-  <!-- Static Transform from map to optitrack (for global positioning) -->
+  <!-- Static Transform from map to optitrack (assuming map is static) -->
   <node pkg="tf" type="static_transform_publisher" name="map_to_optitrack" args="0 0 0 0 0 0 map optitrack 100" />
+
+  <!-- Disable odom transform publication by TurtleBot -->
+  <!-- The base_link will now be handled by the optitrack system -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" value="50.0" />
+    <param name="use_sim_time" value="true" />
+    <remap from="/odom" to="/fake_odom" />
+  </node>
+
+  <!-- Optional: EKF Localization Node (if you decide to use it for sensor fusion) -->
+  <!-- Uncomment if EKF is needed for fusing with other sensors -->
+  <!--
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization_node" output="screen">
+    <param name="use_sim_time" value="true"/>
+    <rosparam command="load" file="/home/tom/Dev/turtlebot_ws/src/turtlebot3/turtlebot3/config/turtlebot3_ekf.yaml"/>
+  </node>
+  -->
 </launch>
 ```
 ---
 
-### Step 5: Run the TurtleBot3 Simulation
+### Step 4: Run the TurtleBot3 Simulation
 
 Start the simulation in Gazebo by running:
 ```
@@ -80,7 +89,7 @@ roslaunch turtlebot3_gazebo turtlebot3_world.launch
 ```
 ---
 
-### Step 6: Prepare and Run the VRPN Simulation Script
+### Step 5: Prepare and Run the VRPN Simulation Script
 
 Place the `optitrack_sim.py` script in your ROS workspace:
 ```
@@ -95,7 +104,7 @@ python vrpn-sim.py
 ```
 ---
 
-### Step 7: Test and Verify the Setup
+### Step 6: Test and Verify the Setup
 
 Ensure the `/vrpn/Body1/odom` topic is being published by running:
 ```
@@ -107,7 +116,7 @@ rostopic echo /vrpn/Body1/odom
 ```
 ---
 
-### Step 8: Visualize in RViz
+### Step 7: Visualize in RViz
 
 Open RViz and add the appropriate TF frames and pose topics:
 ```
