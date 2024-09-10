@@ -85,11 +85,11 @@ Place the `optitrack_sim.py` script in your ROS workspace:
 
 mkdir -p ~/catkin_ws/src/optitrack_sim/src
 ```
-# Copy optitrack_sim.py here
+# Copy vrpn-sim.py here
 
 Then, run the Python simulation script:
 ```
-python optitrack_sim.py
+python vrpn-sim.py
 ```
 ---
 
