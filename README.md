@@ -22,8 +22,9 @@ Clone the TurtleBot3 Repositories:
 Navigate to the src folder of your workspace and run the following commands:
 ```
 cd ~/catkin_ws/src
-git clone -b melodic-devel https://github.com/ROBOTIS-GIT/turtlebot3.git
-git clone -b melodic-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
+git clone https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
 ```
 Build the Workspace:
 Run the following commands:
