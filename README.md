@@ -39,6 +39,7 @@ source devel/setup.bash
 
 Launch Gazebo with the TurtleBot3 world to ensure everything is installed correctly:
 ```
+export TURTLEBOT3_MODEL=burger
 roslaunch turtlebot3_gazebo turtlebot3_world.launch
 ```
 If the TurtleBot3 robot and world load successfully in Gazebo, the installation is correct.
