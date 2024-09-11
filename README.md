@@ -139,7 +139,7 @@ rostopic echo /vrpn/Body1/odom
 
 Open RViz and add the appropriate TF frames and pose topics:
 ```
-rosrun rviz rviz
+rviz
 ```
 #### Add the TurtleBot3 Robot Model in RViz:
 
